@@ -1,3 +1,36 @@
+Project Name: Crypto-Website
+
+Features ✨
+
+Real-time cryptocurrency data 📊
+Fetches live coin prices, market stats, and historical data from trusted APIs for accurate tracking.
+
+Interactive coin cards 💳
+Responsive coin cards with hover effects, dynamic visuals
+
+User-friendly interface 🖥️
+Intuitive layout and responsive design ensure easy navigation for all users.
+
+Detailed price charts 📈
+Shows coin price trends, percentage changes, and performance analysis with interactive tooltips and zoom features.
+
+Amazing animations and stunning visuals 🎨
+Smooth and interactive animations make the website visually appealing and engaging.
+
+Easy integration and customization 🛠️
+Flexible components allow easy customization and integration into other projects.
+
+Dashboard and user experience enhancements 🧭
+Quick search, filters, and favorite coin tracking for a seamless user experience.
+
+Performance optimized ⚡
+Built with React and Vite for fast loading and smooth performance, even with multiple charts and animations.
+
+Contributing 🤝
+If you would like to contribute, feel free to send a pull request. Suggestions and feedback are always welcome!
+
+
+
 # Library
 
 -formik
@@ -10,6 +43,10 @@
 -react-chartjs-2
 -react-icons
 -react-i18next
+
+
+![crypto](https://github.com/user-attachments/assets/5f9fca19-8487-4cde-898e-7f2075ece248)
+
 
 
 # React + Vite
