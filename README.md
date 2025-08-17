@@ -45,8 +45,7 @@ If you would like to contribute, feel free to send a pull request. Suggestions a
 -react-i18next
 
 
-![crypto](https://github.com/user-attachments/assets/5f9fca19-8487-4cde-898e-7f2075ece248)
-
+![crypto](https://github.com/user-attachments/assets/b52aaa85-06f6-4456-b4ca-3e533f2689f6)
 
 
 # React + Vite
