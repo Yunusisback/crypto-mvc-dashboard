@@ -1,1 +1,0 @@
-The codebase is currently being refactored. It will be updated as soon as possible
