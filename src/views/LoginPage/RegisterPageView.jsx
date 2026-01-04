@@ -1,5 +1,5 @@
-import React from 'react';
-import InputFieldView from './InputFieldView';
+
+import InputFieldView from '../InputFieldView';
 import { Link } from 'react-router-dom';
 
 const registerInputs = [

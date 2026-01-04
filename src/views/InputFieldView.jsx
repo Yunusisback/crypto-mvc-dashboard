@@ -1,8 +1,5 @@
 const InputField = ({ formik, data }) => {
-  // data prop'u her bir input'un label, name ve type bilgilerini içerir
-  // data nesnesinden label, name ve type değerlerini alıyoruz
-  // böylece her input için label, name, type bilgilerini
-  // ayrı ayrı yazmak yerine data olarak geçiririz
+
 
   const { label, name, type } = data;
   return (

@@ -1,0 +1,207 @@
+
+
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  background-image: radial-gradient(circle at 50% 50%, #1a1600 0%, #000000 70%);
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.auth-card {
+  display: flex;
+  width: 100%;
+  max-width: 850px;
+  height: 520px;
+  background: #0a0a0a;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 15px rgba(218, 165, 32, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.12);
+}
+
+
+.visual-side {
+  flex: 0.85;
+  background: linear-gradient(135deg, #b8860b, #ffd700, #daa520);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 40px;
+}
+
+.visual-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+}
+
+.visual-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.brand-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #000;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+
+.brand-subtitle {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 0.95rem;
+}
+
+
+.form-side {
+  flex: 1.15;
+  padding: 45px;
+  display: flex;
+  flex-direction: column;
+  background: #0a0a0a;
+}
+
+.auth-nav {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 35px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding-bottom: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.nav-btn.active {
+  color: #ffd700;
+  box-shadow: inset 0 -2px 0 #ffd700;
+}
+
+.form-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.input-group {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.input-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.input-group.short {
+  flex: 0 0 90px;
+}
+
+.modern-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: #ffd700;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+}
+
+.modern-input:focus {
+  outline: none;
+  border-color: #ffd700;
+  background: rgba(255, 215, 0, 0.04);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+
+.modern-input::-webkit-outer-spin-button,
+.modern-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.modern-input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.error-text {
+  color: #ff4d4d;
+  font-size: 0.78rem;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.action-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(90deg, #b8860b, #ffd700, #b8860b);
+  background-size: 200% auto;
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.4s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.action-btn:hover {
+  background-position: right center;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+}
+
+.forgot-pass {
+  text-align: center;
+  color: #666;
+  font-size: 0.85rem;
+  margin-top: 20px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.forgot-pass:hover { color: #ffd700; }
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .auth-card {
+    flex-direction: column;
+    height: auto;
+    max-width: 400px;
+  }
+  .visual-side { height: 160px; flex: none; }
+  .form-side { padding: 35px 25px; }
+  .brand-title { font-size: 1.8rem; }
+}

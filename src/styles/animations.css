@@ -1,0 +1,26 @@
+
+@keyframes goldenGlow {
+    from { text-shadow: 0 0 2px #ffd700; }
+    to { text-shadow: 0 0 10px #ffd700, 0 0 20px #ff8c00; }
+}
+
+@keyframes priceUp {
+  0% { background-color: transparent; }
+  50% { background-color: rgba(39, 174, 96, 0.4); }
+  100% { background-color: transparent; }
+}
+
+@keyframes priceDown {
+  0% { background-color: transparent; }
+  50% { background-color: rgba(231, 76, 60, 0.4); }
+  100% { background-color: transparent; }
+}
+
+
+.price-change-up {
+  animation: priceUp 1.5s ease-out;
+}
+
+.price-change-down {
+  animation: priceDown 1.5s ease-out;
+}

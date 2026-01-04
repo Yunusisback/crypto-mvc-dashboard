@@ -1,9 +1,9 @@
-import React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import RegisterPageView from '../views/RegisterPageView';
-import axios from 'axios'; // Axios kütüphanesi eklendi
+import axios from 'axios'; 
+
 
 const registerValidationSchema = yup.object().shape({
   email: yup.string().email('Geçerli bir email adresi girin').required('Email alanı zorunludur.'),
@@ -29,14 +29,14 @@ const RegisterPageController = ({ setIsLoggedIn }) => {
         
         console.log('Kayıt başarılı:', response.data);
         
-        // API işlemi başarılıysa kullanıcıyı yönlendiriyoruz
+        
         localStorage.setItem("isLoggedIn", "true");
         setIsLoggedIn(true);
         navigate("/home", { replace: true });
-        resetForm(); // Formu sıfırlıyoruz
+        resetForm(); 
 
       } catch (error) {
-        // API'den gelen hatayı yakalıyoruzz
+        
         console.error('API hatası:', error.response?.data || error.message);
         alert('Kayıt işlemi başarısız oldu. Lütfen tekrar deneyin.');
       }

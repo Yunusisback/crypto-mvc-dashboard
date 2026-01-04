@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+
+import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import HeaderView from './views/HeaderView';
-import ProtectedRoute from './components/ProtectedRoute';
+import { GlobalProvider } from './context/GlobalContext';
+import HeaderController from './controllers/HeaderController';
 import LoginPageController from './controllers/LoginPageController';
+import DashboardController from './controllers/DashboardController';
 import MainPageController from './controllers/MainPageController';
 import DetailController from './controllers/DetailController';
-import RegisterPageController from './controllers/RegisterPageController';
+import ProtectedRoute from './components/ProtectedRoute';
+import NotificationSystem from './views/components/NotificationSystem';
 
 function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -19,7 +22,6 @@ function AppContent() {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    // URL değiştiğinde isLoginMode'u ayarla
     if (location.pathname === '/register') {
       setIsLoginMode(false);
     } else {
@@ -29,14 +31,16 @@ function AppContent() {
 
   return (
     <>
-      <HeaderView 
+      <HeaderController 
         isLoggedIn={isLoggedIn} 
         setIsLoggedIn={setIsLoggedIn} 
         setIsLoginMode={setIsLoginMode} 
       />
       
+      <NotificationSystem />
+      
       <Routes>
-        {/* Giriş ve kayıt sayfasını tek bir rotada yönetiyoruz */}
+   
         <Route 
           path="/" 
           element={
@@ -51,6 +55,15 @@ function AppContent() {
         <Route
           path="/register"
           element={<Navigate to="/" replace />}
+        />
+
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <DashboardController />
+            </ProtectedRoute>
+          } 
         />
 
         <Route 
@@ -71,6 +84,7 @@ function AppContent() {
           } 
         />
         
+      
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
@@ -79,9 +93,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <GlobalProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </GlobalProvider>
   );
 }
 

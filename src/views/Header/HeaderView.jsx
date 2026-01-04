@@ -1,14 +1,14 @@
-import React from 'react';
+
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
+import { useGlobal } from '../../context/GlobalContext';
 import './HeaderView.css';
-
-
 
 const HeaderView = ({ isLoggedIn, setIsLoggedIn, setIsLoginMode }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t, i18n } = useTranslation(); 
+  const { t, i18n } = useTranslation();
+  const { theme, toggleTheme } = useGlobal();
 
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
@@ -29,9 +29,9 @@ const HeaderView = ({ isLoggedIn, setIsLoggedIn, setIsLoginMode }) => {
   const isAuthPage = location.pathname === '/' || location.pathname === '/register';
 
   return (
-    <header className="header-container glass-effect">
+    <header className="header-container">
       {!isAuthPage && (
-        <Link className="logo-link" to={isLoggedIn ? "/home" : "/"}>
+        <Link className="logo-link" to={isLoggedIn ? "/dashboard" : "/"}>
           <img height={40} src="/coin-logo.png" alt="logo" />
           <h3 className="logo-title">
             <span className="anim-coin">Coin</span>
@@ -40,9 +40,8 @@ const HeaderView = ({ isLoggedIn, setIsLoggedIn, setIsLoginMode }) => {
         </Link>
       )}
 
-      {/* Navigasyon ve butonlar */}
       <nav className="header-nav">
-        {/* Dil Seçeneği Butonları */}
+    
         {isAuthPage && (
           <div className="language-selector">
             <button
@@ -60,21 +59,36 @@ const HeaderView = ({ isLoggedIn, setIsLoggedIn, setIsLoginMode }) => {
           </div>
         )}
 
-        {!isAuthPage && isLoggedIn && location.pathname !== "/home" && (
-          <NavLink className="home-button" to={"/home"}>
-            🏠 {t('home')}
-          </NavLink>
+     
+        {!isAuthPage && isLoggedIn && (
+          <>
+            <NavLink 
+              to="/dashboard" 
+              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+            >
+              📊 {t('dashboard')}
+            </NavLink>
+            
+            <NavLink 
+              to="/home" 
+              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+            >
+              💰 {t('markets')}
+            </NavLink>
+
+            <button onClick={toggleTheme} className="theme-toggle-btn" title="Tema Değiştir">
+              {theme === 'dark' ? '☀️' : '🌙'}
+            </button>
+
+            <button onClick={handleLogout} className="logout-button">
+              {t('logout')}
+            </button>
+          </>
         )}
 
         {!isAuthPage && !isLoggedIn && location.pathname !== '/' && (
           <button onClick={handleLoginClick} className="login-button">
             {t('login')}
-          </button>
-        )}
-
-        {!isAuthPage && isLoggedIn && (
-          <button onClick={handleLogout} className="logout-button">
-            {t('logout')}
           </button>
         )}
       </nav>
