@@ -1,46 +1,44 @@
-
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { GlobalProvider } from './context/GlobalContext';
-import HeaderController from './controllers/HeaderController';
 import LoginPageController from './controllers/LoginPageController';
 import DashboardController from './controllers/DashboardController';
 import MainPageController from './controllers/MainPageController';
 import DetailController from './controllers/DetailController';
 import ProtectedRoute from './components/ProtectedRoute';
-import NotificationSystem from './views/components/NotificationSystem';
+import NotificationSystem from './components/ui/NotificationSystem';
+import MainLayout from './components/MainLayout'; 
 
 function AppContent() {
+
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true"
   );
   const [isLoginMode, setIsLoginMode] = useState(true);
   const location = useLocation();
 
+ 
   useEffect(() => {
     localStorage.setItem("isLoggedIn", isLoggedIn);
   }, [isLoggedIn]);
 
+
   useEffect(() => {
     if (location.pathname === '/register') {
       setIsLoginMode(false);
-    } else {
+    } else if (location.pathname === '/') {
       setIsLoginMode(true);
     }
   }, [location.pathname]);
 
   return (
-    <>
-      <HeaderController 
-        isLoggedIn={isLoggedIn} 
-        setIsLoggedIn={setIsLoggedIn} 
-        setIsLoginMode={setIsLoginMode} 
-      />
+    <div className="min-h-screen bg-[#050505] text-white">
       
       <NotificationSystem />
       
       <Routes>
-   
+     
+        
         <Route 
           path="/" 
           element={
@@ -52,34 +50,42 @@ function AppContent() {
           } 
         />
         
-        <Route
-          path="/register"
-          element={<Navigate to="/" replace />}
-        />
+   
+        <Route path="/register" element={<Navigate to="/" replace />} />
 
+    
+      
         <Route 
           path="/dashboard" 
           element={
             <ProtectedRoute isLoggedIn={isLoggedIn}>
-              <DashboardController />
+              <MainLayout>
+                <DashboardController />
+              </MainLayout>
             </ProtectedRoute>
           } 
         />
 
+  
         <Route 
           path="/home" 
           element={
             <ProtectedRoute isLoggedIn={isLoggedIn}>
-              <MainPageController />
+              <MainLayout>
+                <MainPageController />
+              </MainLayout>
             </ProtectedRoute>
           } 
         />
         
+
         <Route 
           path="/coin/:id" 
           element={
             <ProtectedRoute isLoggedIn={isLoggedIn}>
-              <DetailController />
+              <MainLayout>
+                <DetailController />
+              </MainLayout>
             </ProtectedRoute>
           } 
         />
@@ -87,7 +93,7 @@ function AppContent() {
       
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </>
+    </div>
   );
 }
 

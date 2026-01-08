@@ -1,86 +1,98 @@
-import { useEffect, useState, useRef, useMemo } from 'react';
-import MainPageModel from '../models/MainPageModel.js';
-import MainPageView from '../views/Main/MainPageView.jsx'; 
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MainPageModel from '../models/MainPageModel'; 
+import MainPageView from '../views/Main/MainPageView'; 
 
 const MainPageController = () => {
+  const navigate = useNavigate();
+  const coinsPerPage = 10; 
+
+
   const [coins, setCoins] = useState([]);
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   
-  const prevPricesRef = useRef({}); 
-  const coinsPerPage = 10;
-  const navigate = useNavigate();
-
-  const fetchCoins = async () => {
+  // Kullanıcı bilgisi
+  const [user] = useState(() => {
     try {
-      const data = await MainPageModel.getCoins();
-      if (data) {
-        const newPrices = {};
-        const updatedCoins = data.map(coin => {
-          const prevPrice = prevPricesRef.current[coin.id];
-          let priceChange = null;
-          if (prevPrice && prevPrice > coin.current_price) priceChange = 'down';
-          else if (prevPrice && prevPrice < coin.current_price) priceChange = 'up';
-          newPrices[coin.id] = coin.current_price;
-          return { ...coin, priceChange };
-        });
-        setCoins(updatedCoins);
-        prevPricesRef.current = newPrices;
-      }
+      const userData = localStorage.getItem('currentUser');
+      return userData ? JSON.parse(userData) : { email: 'Misafir', name: 'Misafir' };
+    } catch {
+      return { email: 'Misafir', name: 'Misafir' };
+    }
+  });
+
+  const fetchCoins = useCallback(async () => {
+    try {
+      setIsLoading(true);
       setError(null);
+      
+      // Tek seferde 100 coin çekiyoruz
+      const data = await MainPageModel.getCoins(100, 1);
+      
+      if (data) {
+        setCoins(data);
+      }
     } catch (err) {
-      setError('Veriler güncellenirken bir sorun oluştu.');
+      console.error("Controller Error:", err);
+      setError('Veriler yüklenirken bir sorun oluştu.');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchCoins();
-    const intervalId = setInterval(fetchCoins, 60000); 
-    return () => clearInterval(intervalId);
-  }, []);
+  }, [fetchCoins]);
 
+  // Filtreleme ve Sayfalama
   const filteredCoins = useMemo(() => {
-    return coins.filter(
-      (coin) =>
-        coin.name.toLowerCase().includes(search.toLowerCase()) ||
-        coin.symbol.toLowerCase().includes(search.toLowerCase())
+    if (!search) return coins;
+    const term = search.toLowerCase();
+    return coins.filter(coin =>
+      coin.name.toLowerCase().includes(term) ||
+      coin.symbol.toLowerCase().includes(term)
     );
   }, [coins, search]);
 
   const totalPages = Math.ceil(filteredCoins.length / coinsPerPage);
-  
-  const currentCoins = useMemo(() => {
-    const indexOfLastCoin = currentPage * coinsPerPage;
-    const indexOfFirstCoin = indexOfLastCoin - coinsPerPage;
-    return filteredCoins.slice(indexOfFirstCoin, indexOfLastCoin);
-  }, [filteredCoins, currentPage]);
 
-  const handleNext = () => setCurrentPage(p => Math.min(p + 1, totalPages));
-  const handlePrev = () => setCurrentPage(p => Math.max(p - 1, 1));
-  const handleSearchChange = (e) => {
+  const currentCoins = useMemo(() => {
+    const start = (currentPage - 1) * coinsPerPage;
+    return filteredCoins.slice(start, start + coinsPerPage);
+  }, [filteredCoins, currentPage, coinsPerPage]);
+
+  const handleSearchChange = useCallback((e) => {
     setSearch(e.target.value);
-    setCurrentPage(1);
-  };
+    setCurrentPage(1); 
+  }, []);
+
+  const handleNext = useCallback(() => 
+    setCurrentPage(p => Math.min(p + 1, totalPages)), [totalPages]);
+
+  const handlePrev = useCallback(() => 
+    setCurrentPage(p => Math.max(p - 1, 1)), []);
+
+  const handleRowClick = useCallback((id) => 
+    navigate(`/coin/${id}`), [navigate]);
 
   return (
     <MainPageView
       isLoading={isLoading}
       error={error}
-      coins={coins}
+      coins={coins} 
       search={search}
       currentPage={currentPage}
       totalPages={totalPages}
-      currentCoins={currentCoins}
-      indexOfFirstCoin={(currentPage - 1) * coinsPerPage} 
-      handleSearchChange={handleSearchChange} 
+      currentCoins={currentCoins} 
+      handleSearchChange={handleSearchChange}
       handleNext={handleNext}
       handlePrev={handlePrev}
-      handleRowClick={(id) => navigate(`/coin/${id}`)}
+      handleRowClick={handleRowClick}
+      coinsPerPage={coinsPerPage}
+      user={user}
     />
   );
 };

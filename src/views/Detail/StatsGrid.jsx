@@ -1,20 +1,56 @@
-
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const StatsGrid = ({ coin }) => {
-  const data = [
-    { label: "Piyasa Sırası", value: `#${coin.market_cap_rank}` },
-    { label: "Güncel Fiyat", value: `$${coin.market_data.current_price.usd.toLocaleString()}` },
-    { label: "24s Değişim", value: `%${coin.market_data.price_change_percentage_24h.toFixed(2)}`, 
-      color: coin.market_data.price_change_percentage_24h > 0 ? '#00ff88' : '#ff4d4d' },
-    { label: "Market Hacmi", value: `$${(coin.market_data.market_cap.usd / 1e9).toFixed(2)}B` }
-  ];
+  const { t } = useTranslation();
+
+  const statsData = useMemo(() => {
+    if (!coin || !coin.market_data) return [];
+
+      // Piyasa verilerini al
+    const marketData = coin.market_data;
+    const priceChange = marketData.price_change_percentage_24h || 0;
+
+    return [
+      { 
+        label: t('market_rank', 'Piyasa Sırası'), 
+        value: `#${coin.market_cap_rank || 'N/A'}` 
+      },
+      { 
+        label: t('current_price', 'Güncel Fiyat'), 
+        value: `$${marketData.current_price?.usd?.toLocaleString() || '0'}` 
+      },
+      { 
+        label: t('24h_change', '24s Değişim'), 
+        value: `${priceChange.toFixed(2)}%`, 
+        isPositive: priceChange > 0
+      },
+      { 
+        label: t('market_cap', 'Market Hacmi'), 
+        value: `$${((marketData.market_cap?.usd || 0) / 1e9).toFixed(2)}B` 
+      }
+    ];
+  }, [coin, t]);
+
+  if (!coin || statsData.length === 0) return null;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-      {data.map((item, index) => (
-        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #222' }}>
-          <span style={{ color: '#888', fontSize: '0.9rem' }}>{item.label}</span>
-          <span style={{ color: item.color || '#fff', fontWeight: 'bold' }}>{item.value}</span>
+    <div className="space-y-4">
+      {statsData.map((item, index) => (
+        <div 
+          key={index} 
+          className="flex justify-between items-center py-3 border-b border-gray-800 last:border-0 hover:bg-white/5 transition-colors px-2 rounded-lg"
+        >
+          <span className="text-gray-400 text-sm font-medium">
+            {item.label}
+          </span>
+          <span className={`font-bold font-mono ${
+            item.isPositive !== undefined 
+              ? item.isPositive ? 'text-emerald-400' : 'text-red-400'
+              : 'text-white'
+          }`}>
+            {item.value}
+          </span>
         </div>
       ))}
     </div>

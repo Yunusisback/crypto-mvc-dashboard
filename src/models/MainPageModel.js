@@ -1,22 +1,29 @@
 import axios from 'axios';
 
+const API_BASE_URL = 'https://api.coingecko.com/api/v3';
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: 30000,
+});
+
 class MainPageModel {
-  static async getCoins() {
+  static async getCoins(perPage = 30, page = 1) {
     try {
-      const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+      const { data } = await api.get('/coins/markets', {
         params: {
           vs_currency: 'usd',
           order: 'market_cap_desc',
-          per_page: 30,
-          page: 1,
-          sparkline: false
+          per_page: perPage,
+          page: page,
+          sparkline: false,
+          price_change_percentage: '24h'
         }
       });
-      return response.data;
+      return data;
     } catch (err) {
-      console.error('API isteği sırasında hata:', err.message || err);
-      throw err;
-
+      console.warn("Market list warning:", err.message);
+      return [];
     }
   }
 }

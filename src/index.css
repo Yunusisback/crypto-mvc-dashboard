@@ -1,29 +1,53 @@
-:root {
-  font-family: 'Inter', sans-serif;
-  background-color: #0a0a0a;
-  color: #e0e0e0;
+@import "tailwindcss";
+
+@theme {
+
+  --color-primary: #FFD700;
+  --color-primary-dark: #C5A000;
+  --color-bg-dark: #000000;
+  --color-bg-main: #F8F9FA;
+  --color-bg-card: #FFFFFF;
+  --color-text-main: #111111;
+  --color-text-muted: #6B7280;
 }
 
 body {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+  font-family: 'Inter', sans-serif;
   margin: 0;
-  min-height: 100vh;
-  background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
-  background-attachment: fixed;
+  overflow-x: hidden;
 }
 
 
-* {
-  box-sizing: border-box;
+.modern-card {
+  background: var(--color-bg-card);
+  border-radius: 24px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s ease;
 }
 
-input, button {
-  font-family: inherit;
-  outline: none;
+.modern-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--color-primary);
+  box-shadow: 0 15px 30px rgba(255, 215, 0, 0.15);
 }
 
-.page-container {
-  padding-top: 80px;
-  display: flex;
-  justify-content: center;
-  min-height: calc(100vh - 80px);
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
 }

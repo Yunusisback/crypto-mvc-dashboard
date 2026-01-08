@@ -1,93 +1,122 @@
 import millify from 'millify';
+import { useTranslation } from 'react-i18next';
 import { useGlobal } from '../../../context/GlobalContext';
-
+import { FiStar, FiArrowUp, FiArrowDown } from 'react-icons/fi';
 
 const TopCoinsTable = ({ coins, onCoinClick }) => {
+  const { t } = useTranslation();
   const { isInWatchlist, addToWatchlist, removeFromWatchlist } = useGlobal();
 
+  const handleWatchlistToggle = (e, coinId) => {
+    e.stopPropagation();
+    if (isInWatchlist(coinId)) {
+      removeFromWatchlist(coinId);
+    } else {
+      addToWatchlist(coinId);
+    }
+  };
+
   return (
-    <div className="top-coins-section">
-      <div className="section-header">
-        <h2 className="section-title">
-          <span className="chart-icon">📈</span> Top 10 Coinler
+    <div className="glass-panel rounded-2xl p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+          <div className="w-1 h-8 bg-yellow-400 rounded-full"></div>
+          {t('top_coins')}
         </h2>
-        <span className="section-badge">Piyasa Değerine Göre</span>
+        <span className="px-4 py-2 bg-yellow-400/10 text-yellow-400 rounded-full text-xs font-bold border border-yellow-400/20">
+          {t('market_cap')}
+        </span>
       </div>
 
-      <div className="table-container">
-        <table className="coins-table">
+      <div className="overflow-x-auto">
+        <table className="w-full">
           <thead>
-            <tr>
-              <th>#</th>
-              <th>Coin</th>
-              <th>Fiyat</th>
-              <th>24s Değişim</th>
-              <th>7g Değişim</th>
-              <th>Piyasa Değeri</th>
-              <th>Hacim (24s)</th>
-              <th>İzle</th>
+            <tr className="border-b border-white/10">
+              <th className="text-left py-4 px-4 text-gray-400 text-xs uppercase tracking-wider font-semibold">#</th>
+              <th className="text-left py-4 px-4 text-gray-400 text-xs uppercase tracking-wider font-semibold">{t('coin')}</th>
+              <th className="text-right py-4 px-4 text-gray-400 text-xs uppercase tracking-wider font-semibold">{t('price')}</th>
+              <th className="text-right py-4 px-4 text-gray-400 text-xs uppercase tracking-wider font-semibold">24h</th>
+              <th className="text-right py-4 px-4 text-gray-400 text-xs uppercase tracking-wider font-semibold">7d</th>
+              <th className="text-right py-4 px-4 text-gray-400 text-xs uppercase tracking-wider font-semibold">{t('market_cap')}</th>
+              <th className="text-right py-4 px-4 text-gray-400 text-xs uppercase tracking-wider font-semibold">{t('volume')}</th>
+              <th className="text-center py-4 px-4 text-gray-400 text-xs uppercase tracking-wider font-semibold">★</th>
             </tr>
           </thead>
           <tbody>
-            {coins.map((coin, index) => (
-              <tr key={coin.id} className="coin-row">
-                <td className="rank-cell">{index + 1}</td>
-                
-                <td className="coin-cell" onClick={() => onCoinClick(coin.id)}>
-                  <img src={coin.image} alt={coin.name} className="coin-image" />
-                  <div className="coin-info">
-                    <div className="coin-name">{coin.name}</div>
-                    <div className="coin-symbol">{coin.symbol.toUpperCase()}</div>
-                  </div>
-                </td>
+            {coins.map((coin, index) => {
+              const isPositive24h = coin.price_change_percentage_24h >= 0;
+              const isPositive7d = (coin.price_change_percentage_7d_in_currency || 0) >= 0;
+              const inWatchlist = isInWatchlist(coin.id);
 
-                <td className="price-cell" onClick={() => onCoinClick(coin.id)}>
-                  ${coin.current_price.toLocaleString()}
-                </td>
-
-                <td 
-                  className={`change-cell ${coin.price_change_percentage_24h >= 0 ? 'positive' : 'negative'}`}
+              return (
+                <tr 
+                  key={coin.id} 
                   onClick={() => onCoinClick(coin.id)}
+                  className="border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer group"
                 >
-                  <span className="change-arrow">
-                    {coin.price_change_percentage_24h >= 0 ? '↑' : '↓'}
-                  </span>
-                  {Math.abs(coin.price_change_percentage_24h || 0).toFixed(2)}%
-                </td>
+                  <td className="py-4 px-4 text-gray-400 font-bold">{index + 1}</td>
+                  
+                  <td className="py-4 px-4">
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src={coin.image} 
+                        alt={coin.name} 
+                        className="w-10 h-10 rounded-full group-hover:scale-110 transition-transform"
+                      />
+                      <div>
+                        <div className="font-bold text-white group-hover:text-yellow-400 transition-colors">
+                          {coin.name}
+                        </div>
+                        <div className="text-xs text-gray-500 uppercase font-bold">
+                          {coin.symbol}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
 
-                <td 
-                  className={`change-cell ${(coin.price_change_percentage_7d_in_currency || 0) >= 0 ? 'positive' : 'negative'}`}
-                  onClick={() => onCoinClick(coin.id)}
-                >
-                  <span className="change-arrow">
-                    {(coin.price_change_percentage_7d_in_currency || 0) >= 0 ? '↑' : '↓'}
-                  </span>
-                  {Math.abs(coin.price_change_percentage_7d_in_currency || 0).toFixed(2)}%
-                </td>
+                  <td className="py-4 px-4 text-right text-white font-mono font-semibold">
+                    ${coin.current_price.toLocaleString()}
+                  </td>
 
-                <td className="market-cap-cell" onClick={() => onCoinClick(coin.id)}>
-                  ${millify(coin.market_cap)}
-                </td>
+                  <td className="py-4 px-4 text-right">
+                    <div className={`inline-flex items-center gap-1 ${isPositive24h ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {isPositive24h ? <FiArrowUp size={14} /> : <FiArrowDown size={14} />}
+                      <span className="font-bold">{Math.abs(coin.price_change_percentage_24h || 0).toFixed(2)}%</span>
+                    </div>
+                  </td>
 
-                <td className="volume-cell" onClick={() => onCoinClick(coin.id)}>
-                  ${millify(coin.total_volume)}
-                </td>
+                  <td className="py-4 px-4 text-right">
+                    <div className={`inline-flex items-center gap-1 ${isPositive7d ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {isPositive7d ? <FiArrowUp size={14} /> : <FiArrowDown size={14} />}
+                      <span className="font-bold">{Math.abs(coin.price_change_percentage_7d_in_currency || 0).toFixed(2)}%</span>
+                    </div>
+                  </td>
 
-                <td className="action-cell">
-                  <button
-                    className={`watchlist-btn ${isInWatchlist(coin.id) ? 'active' : ''}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      isInWatchlist(coin.id) 
-                        ? removeFromWatchlist(coin.id) 
-                        : addToWatchlist(coin.id);
-                    }}
-                  >
-                    {isInWatchlist(coin.id) ? '⭐' : '☆'}
-                  </button>
-                </td>
-              </tr>
-            ))}
+                  <td className="py-4 px-4 text-right text-gray-400 font-mono">
+                    ${millify(coin.market_cap)}
+                  </td>
+
+                  <td className="py-4 px-4 text-right text-gray-400 font-mono">
+                    ${millify(coin.total_volume)}
+                  </td>
+
+                  <td className="py-4 px-4 text-center">
+                    <button
+                      type="button"
+                      onClick={(e) => handleWatchlistToggle(e, coin.id)}
+                      className={`p-2 rounded-full transition-all hover:scale-110 ${
+                        inWatchlist 
+                          ? 'text-yellow-400 bg-yellow-400/10' 
+                          : 'text-gray-500 hover:text-yellow-400 hover:bg-yellow-400/10'
+                      }`}
+                      aria-label={inWatchlist ? t('removed_from_watchlist') : t('added_to_watchlist')}
+                    >
+                      <FiStar size={18} fill={inWatchlist ? 'currentColor' : 'none'} />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
