@@ -1,88 +1,114 @@
-import axios from 'axios';
+import api from '../services/api'; 
 
+const DashboardModel = {
 
-const API_BASE_URL = 'https://api.coingecko.com/api/v3';
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 30000, 
-});
-
-//
-class DashboardModel {
-  static async getGlobalData() {
+  // Global Piyasa Verileri
+  getGlobalData: async () => {
     try {
-      const { data } = await api.get('/global');
-      return data.data;
-    } catch (err) {
-      console.warn("Global data warning:", err.message);
+      const response = await api.get('/global');
+      return response.data.data;
+    } catch (error) {
+      console.error("Global veri hatası:", error);
       return null;
     }
-  }
+  },
 
-  // Trend Olan Coinleri Al
-  static async getTrendingCoins() {
+  // Trend Olan Coinler
+  getTrendingCoins: async () => {
     try {
-      const { data } = await api.get('/search/trending');
-      return data.coins;
-    } catch (err) {
-      console.warn("Trending data warning:", err.message);
+      const response = await api.get('/search/trending');
+      return response.data.coins.map(coin => coin.item);
+    } catch (error) {
+      console.error("Trend coin hatası:", error);
       return [];
     }
-  }
-  
-  // En İyi Coinleri Al
-  static async getTopCoins(limit = 10) {
+  },
+
+  // Top Coinler 
+  getTopCoins: async (limit = 20) => {
     try {
-      const { data } = await api.get('/coins/markets', {
+      const response = await api.get('/coins/markets', {
         params: {
           vs_currency: 'usd',
           order: 'market_cap_desc',
           per_page: limit,
           page: 1,
           sparkline: true,
-          price_change_percentage: '24h,7d',
-        },
+          price_change_percentage: '24h'
+        }
       });
-      return data;
-    } catch (err) {
-      console.warn("Top coins warning:", err.message);
+      return response.data;
+    } catch (error) {
+      console.error("Top coin hatası:", error);
       return [];
     }
-  }
+  },
 
-  // İzleme Listesi Coinlerini Al
-  static async getWatchlistCoins(coinIds) {
-    if (!coinIds?.length) return [];
+  // Watchlist veya Portföy için ID ye göre coin çekme
+  getWatchlistCoins: async (coinIds) => {
+    if (!coinIds || coinIds.length === 0) return [];
     try {
-      const { data } = await api.get('/coins/markets', {
+      const response = await api.get('/coins/markets', {
         params: {
           vs_currency: 'usd',
           ids: coinIds.join(','),
           order: 'market_cap_desc',
           sparkline: true,
-          price_change_percentage: '24h,7d',
-        },
+          price_change_percentage: '24h'
+        }
       });
-      return data;
-    } catch (err) {
+      return response.data;
+    } catch (error) {
+      console.error("Watchlist coin hatası:", error);
+      return [];
+    }
+  },
+
+  // Market İstatistiklerini Hesaplama Helperı
+  calculateMarketStats: (data) => {
+    if (!data) return null;
+    return {
+      marketCap: data.total_market_cap.usd,
+      volume: data.total_volume.usd,
+      btcDominance: data.market_cap_percentage.btc,
+      activeCoins: data.active_cryptocurrencies
+    };
+  },
+
+ 
+  // Bu fonksiyon önce arama yapar  sonra bulunan coinlerin fiyat verisini çeker
+  searchCoinsWithPrice: async (query) => {
+    if (!query || query.length < 3) return []; 
+    try {
+
+     
+      const searchResponse = await api.get('/search', { params: { query } });
+      
+      // İlk 5 sonucu alıyoruz
+      const foundCoins = searchResponse.data.coins.slice(0, 5);
+
+      if (foundCoins.length === 0) return [];
+
+      //  Bulunan coinlerin ID lerini topla
+      const coinIds = foundCoins.map(c => c.id);
+
+      // Fiyat verilerini çek
+      const pricesResponse = await api.get('/coins/markets', {
+        params: {
+          vs_currency: 'usd',
+          ids: coinIds.join(','),
+          order: 'market_cap_desc',
+          sparkline: false,
+          price_change_percentage: '24h'
+        }
+      });
+      
+      return pricesResponse.data;
+    } catch (error) {
+      console.error("Search API error:", error);
       return [];
     }
   }
-
-  // Piyasa İstatistiklerini Hesapla
-  static calculateMarketStats(globalData) {
-    if (!globalData) return null;
-    return {
-      totalMarketCap: globalData.total_market_cap?.usd ?? 0,
-      totalVolume: globalData.total_volume?.usd ?? 0,
-      btcDominance: globalData.market_cap_percentage?.btc ?? 0,
-      ethDominance: globalData.market_cap_percentage?.eth ?? 0,
-      marketCapChange: globalData.market_cap_change_percentage_24h_usd ?? 0,
-      activeCryptos: globalData.active_cryptocurrencies ?? 0,
-      markets: globalData.markets ?? 0,
-    };
-  }
-}
+};
 
 export default DashboardModel;

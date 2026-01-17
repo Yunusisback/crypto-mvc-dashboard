@@ -21,12 +21,12 @@ const initialValues = isLoginMode
     onSubmit: async (values, { resetForm, setFieldError, setSubmitting }) => {
       setAuthStatus({ error: '', success: '' });
 
-      // Simüle edilmiş gecikme
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
+     
+      
       try {
         if (isLoginMode) {
-          // GİRİŞ İŞLEMİ
+
+        
           const user = AuthModel.loginUser(values.email, values.password);
           
           if (!user) {
@@ -62,7 +62,7 @@ const initialValues = isLoginMode
     },
   });
 
-  // Ortak başarılı işlem sonlandırıcı 
+  
   const completeAuth = (user, message, resetForm) => {
     setAuthStatus({ error: '', success: message });
     localStorage.setItem("isLoggedIn", "true");
@@ -70,9 +70,9 @@ const initialValues = isLoginMode
     
     setTimeout(() => {
       setIsLoggedIn(true);
-      navigate("/home", { replace: true });
+      navigate('/dashboard', { replace: true });
       resetForm();
-    }, 1500);
+    }, 1500); // Başarı mesajını okuması için kısa bir süre bekletiyoruz
   };
 
   // Mod değiştirme işlemi

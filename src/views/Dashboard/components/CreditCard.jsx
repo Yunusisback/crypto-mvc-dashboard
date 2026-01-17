@@ -1,83 +1,103 @@
-
 import { SiVisa } from "react-icons/si";
-import { RiWifiFill } from "react-icons/ri"; 
+import { RiWifiFill } from "react-icons/ri";
+import { useTranslation } from 'react-i18next'; 
 
 const CreditCard = () => {
+  const { t } = useTranslation(); 
+
   return (
-    // Kart Konteyner
-    <div className="group perspective-1000 w-full aspect-[1.586] cursor-pointer mx-auto shadow-2xl shadow-black/50 rounded-[14px]">
-      <div className="relative w-full h-full rounded-[14px] overflow-hidden transition-all duration-500 transform group-hover:scale-[1.02] border border-white/10 bg-[#0a0a0a]">
-        
-   
-        <div className="absolute inset-0 bg-linear-to-br from-[#1a1a1a] via-[#050505] to-[#000000]"></div>
-        
-      
-        <div className="absolute top-[-50%] left-[-20%] w-[80%] h-[150%] bg-white/5 rounded-full blur-3xl pointer-events-none mix-blend-overlay"></div>
-        <div className="absolute bottom-[-30%] right-[-20%] w-[60%] h-full bg-white/5 rounded-full blur-2xl pointer-events-none mix-blend-overlay"></div>
-        
-    
+  
+    <div className="group w-full max-w-95 lg:w-95 shrink-0 aspect-[1.586] mx-auto perspective-[1000px]">
+      <div
+        className={`
+          relative w-full h-full rounded-2xl overflow-hidden 
+          transition-all duration-500 shadow-2xl shadow-yellow-900/50
+          transform-style-preserve-3d group-hover:rotate-y-12 group-hover:rotate-x-[-8deg]
+          bg-linear-to-br from-[#DBB468] via-[#C5A358] to-[#8B6914]
+        `}
+      >
+         {/* Arka Plan Efektleri */}
+        <div className="absolute inset-0 bg-linear-to-br from-primary/30 via-[#FFA500]/20 to-[#DAA520]/40"></div>
+        <div className="absolute top-[-30%] right-[-20%] w-[70%] h-full bg-primary/20 rounded-full blur-3xl"></div>
 
-    
-        <div className="relative z-10 p-[6%] flex flex-col h-full justify-between font-sans text-white">
-          
-          {/*  Üst Kısım Visa Gold ve Temassız */}
-          <div className="flex justify-between items-start">
-             <h2 className="text-[5cqw] leading-none font-normal tracking-wide text-white/90 drop-shadow-md" style={{ fontSize: 'clamp(14px, 5cqw, 24px)' }}>
-                Visa Gold
-             </h2>
-             <RiWifiFill className="rotate-90 drop-shadow-md opacity-80" style={{ fontSize: 'clamp(20px, 8cqw, 36px)' }} />
+        {/* çip deseni */}
+        <div 
+          className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 H 40 V 40 H 70' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M90 10 V 50 H 50 V 90' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M30 80 H 10 V 60' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='10' cy='10' r='3' fill='white'/%3E%3Ccircle cx='70' cy='40' r='3' fill='white'/%3E%3Ccircle cx='90' cy='10' r='3' fill='white'/%3E%3Ccircle cx='50' cy='90' r='3' fill='white'/%3E%3C/svg%3E")`,
+            backgroundSize: '120px 120px', 
+            backgroundRepeat: 'repeat',
+            transform: 'rotate(0deg)'
+          }}
+        ></div>
+
+        <div className="relative w-full h-full p-6">
+          <div className="relative">
+            
+            {/* logo */}
+            <div className="absolute top-0 left-0">
+              <h2 className="text-4xl font-bold text-black drop-shadow-lg italic tracking-wide">
+                Vault
+              </h2>
+            </div>
+
+            {/* temassız */}
+            <div className="absolute top-14 right-0 mt-2">
+              <RiWifiFill className="rotate-90 text-black/90" size={34} />
+            </div>
           </div>
 
-          {/* Orta Kısım Gümüş Çip ve Numaralar */}
-          <div className="flex flex-col gap-[4%]">
+          {/* Çip ve Kart Numarası */}
+          <div className="relative">
 
-             {/* Gümüş Çip */}
-             <div className="w-[14%] aspect-[1.2] bg-linear-to-br from-[#e3e3e3] to-[#8f8f8f] rounded-[15%] border border-[#7a7a7a]/50 relative overflow-hidden shadow-lg">
-                 <div className="absolute top-1/2 left-0 right-0 h-px bg-[#444]/40"></div>
-                 <div className="absolute top-0 bottom-0 left-1/3 w-px bg-[#444]/40"></div>
-                 <div className="absolute top-0 bottom-0 right-1/3 w-px bg-[#444]/40"></div>
-                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[35%] h-[50%] border border-[#444]/40 rounded-[20%]"></div>
-             </div>
+            {/* ÇİP */}
+            <div className="absolute top-16 left-0">
+              <div className="w-12 h-9 ml-2 bg-linear-to-br from-[#f0f0f0] via-[#d9d9d9] to-[#a1a1a1] rounded-lg border border-[#7a7a7a]/40 relative overflow-hidden shadow-[1px_1px_3px_rgba(0,0,0,0.3)]">
+                <div className="absolute top-1/2 left-0 right-0 h-px bg-black/10"></div>
+                <div className="absolute top-0 bottom-0 left-1/3 w-px bg-black/10"></div>
+                <div className="absolute top-0 bottom-0 right-1/3 w-px bg-black/10"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-5 border border-black/10 rounded-md"></div>
+              </div>
+            </div>
 
-             {/* Kart Numarası */}
-             <div className="w-full">
-                <p className="font-mono tracking-[0.08em] text-transparent bg-clip-text bg-linear-to-b from-white to-gray-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] whitespace-nowrap text-center w-full mt-3 pr-5" 
-                   style={{ fontSize: 'clamp(16px, 6.5cqw, 25px)' }}>
-                   4000 1234 5678 9010
+            {/* KART NUMARASI */}
+            <div className="absolute top-28 left-0 w-full">
+              <div className="font-mono text-xl tracking-widest text-white/95 drop-shadow-md font-semibold whitespace-nowrap">
+                4000 1234 5678 9010
+              </div>
+            </div>
+          </div>
+
+          <div className="relative">
+
+            {/* isim */}
+            <div className="absolute top-37 left-0">
+              <div className="flex flex-col gap-1">
+                <p className="text-[10px] text-white/80 uppercase tracking-wide">{t('card_holder')}</p>
+                <p className="text-sm font-semibold text-white/95 uppercase tracking-wider whitespace-nowrap">
+                  Deniz Kaya
                 </p>
-             </div>
-          </div>
+              </div>
+            </div>
 
-          {/*   Alt Kısım tarih isim logo */}
-          <div className="flex justify-between items-end w-full">
-             
-             {/* Sol Tarihler ve İsim */}
-             <div className="flex flex-col gap-2.5 w-[70%] -translate-y-6">
-                
-                {/* 12/25 */}
-                <div className="flex items-center justify-center w-[60%] gap-1">
-                   <div className="flex flex-col leading-none items-end ">
-                      <span className="text-[0.4rem] md:text-[0.5rem] font-bold uppercase text-white/50 tracking-wide">Valid</span>
-                      <span className="text-[0.4rem] md:text-[0.5rem] font-bold uppercase text-white/50 tracking-wide">Thru</span>
-                   </div>
-                   <p className="font-mono font-medium text-white/90 drop-shadow-md" style={{ fontSize: 'clamp(10px, 4cqw, 18px)' }}>
-                      12/25
-                   </p>
+            {/* tarih */}
+            <div className="absolute top-37 left-36">
+              <div className="flex flex-col gap-1">
+                <div className="flex flex-col leading-[0.9rem]">
+                  <p className="text-[10px] text-white/60 uppercase tracking-wide">{t('valid')}</p>
+                  <p className="text-[10px] text-white/60 uppercase tracking-wide">{t('thru')}</p>
                 </div>
-
-                {/* İsim */}
-                <p className="font-medium tracking-widest uppercase font-mono text-transparent bg-clip-text bg-linear-to-b from-white to-gray-400 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap overflow-hidden text-ellipsis"
-                   style={{ fontSize: 'clamp(10px, 4cqw, 18px)' }}>
-                   ARYA WIJAYA
+                <p className="text-sm font-semibold text-white/95 font-mono">
+                  12/25
                 </p>
-             </div>
+              </div>
+            </div>
 
-             {/* sağ Visa Logosu */}
-             <div className="w-[30%] flex justify-end translate-y-2">
-               <SiVisa className="text-white drop-shadow-lg opacity-90 w-full h-auto" />
-             </div>
+            {/* VISA */}
+            <div className="absolute top-30 right-0">
+              <SiVisa className="text-black/80 w-24 h-auto opacity-95 drop-shadow-lg translate-y-2" />
+            </div>
           </div>
-
         </div>
       </div>
     </div>

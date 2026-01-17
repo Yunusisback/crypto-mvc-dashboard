@@ -5,6 +5,7 @@ const FormInput = ({ formik, name, type = "text", label, icon: Icon }) => {
 
   const inputContainerClass = "relative group";
   
+  
   const inputClass = `
     peer w-full bg-white/5 hover:bg-white/10 
     border border-white/10 rounded-2xl py-4 pl-12 pr-4 

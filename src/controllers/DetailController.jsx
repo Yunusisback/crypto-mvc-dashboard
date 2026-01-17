@@ -24,7 +24,7 @@ const DetailController = () => {
         DetailModel.getCoinChartData(id, state.activeRange)
       ]);
 
-     
+     // Grafik verisini uygun formata çevir
       const formattedChartData = {
         labels: historyData?.map(item => item.time) || [],
         datasets: [{

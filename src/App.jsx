@@ -14,6 +14,7 @@ function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true"
   );
+
   const [isLoginMode, setIsLoginMode] = useState(true);
   const location = useLocation();
 
@@ -32,13 +33,13 @@ function AppContent() {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white">
+    <div className="min-h-screen bg-bg-dark text-white">
       
       <NotificationSystem />
       
       <Routes>
      
-        
+     
         <Route 
           path="/" 
           element={
@@ -50,11 +51,11 @@ function AppContent() {
           } 
         />
         
-   
+    
         <Route path="/register" element={<Navigate to="/" replace />} />
 
     
-      
+     
         <Route 
           path="/dashboard" 
           element={
@@ -66,7 +67,7 @@ function AppContent() {
           } 
         />
 
-  
+       
         <Route 
           path="/home" 
           element={
@@ -77,8 +78,7 @@ function AppContent() {
             </ProtectedRoute>
           } 
         />
-        
-
+     
         <Route 
           path="/coin/:id" 
           element={
@@ -90,7 +90,7 @@ function AppContent() {
           } 
         />
         
-      
+     
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>

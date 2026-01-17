@@ -7,14 +7,15 @@ const MainPageController = () => {
   const navigate = useNavigate();
   const coinsPerPage = 10; 
 
-
-  const [coins, setCoins] = useState([]);
+  const [initialCoins, setInitialCoins] = useState([]); 
+  const [coins, setCoins] = useState([]); 
+  
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   
-  // Kullanıcı bilgisi
+  // Kullanıcı bilgisi (localStorage dan)
   const [user] = useState(() => {
     try {
       const userData = localStorage.getItem('currentUser');
@@ -24,16 +25,17 @@ const MainPageController = () => {
     }
   });
 
-  const fetchCoins = useCallback(async () => {
+  //  Sayfa açılınca ilk veriyi çek
+  const fetchInitialData = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
       
-      // Tek seferde 100 coin çekiyoruz
       const data = await MainPageModel.getCoins(100, 1);
       
       if (data) {
-        setCoins(data);
+        setInitialCoins(data); // Yedeğe at
+        setCoins(data);        // Ekrana bas
       }
     } catch (err) {
       console.error("Controller Error:", err);
@@ -44,29 +46,59 @@ const MainPageController = () => {
   }, []);
 
   useEffect(() => {
-    fetchCoins();
-  }, [fetchCoins]);
+    fetchInitialData();
+  }, [fetchInitialData]);
 
-  // Filtreleme ve Sayfalama
-  const filteredCoins = useMemo(() => {
-    if (!search) return coins;
-    const term = search.toLowerCase();
-    return coins.filter(coin =>
-      coin.name.toLowerCase().includes(term) ||
-      coin.symbol.toLowerCase().includes(term)
-    );
-  }, [coins, search]);
+  //  Arama Mantığı 
+  useEffect(() => {
 
-  const totalPages = Math.ceil(filteredCoins.length / coinsPerPage);
+     // Arama kutusu boş veya 3 karakterden azsa  ilk veriyi göster
+    if (!search || search.length < 3) {
+      if (initialCoins.length > 0) {
+        setCoins(initialCoins);
+      }
+      return;
+    }
 
+      
+    // Yazmayı bıraktıktan 500ms sonra istek atar 
+    const timerId = setTimeout(async () => {
+      setIsLoading(true);
+      try {
+
+        // Yeni yazdığımız arama fonksiyonunu kullanıyoruz
+        const results = await MainPageModel.searchCoins(search);
+        
+        if (results && results.length > 0) {
+          setCoins(results);
+          setCurrentPage(1); 
+        }
+      } catch (err) {
+        console.error("Search Error:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 500);
+
+    // Kullanıcı 500ms dolmadan yeni harfe basarsa  önceki sayacı iptal et
+    return () => clearTimeout(timerId);
+
+  }, [search, initialCoins]);
+
+
+   
+   // Sayfalama için mevcut coinleri hesapla
   const currentCoins = useMemo(() => {
     const start = (currentPage - 1) * coinsPerPage;
-    return filteredCoins.slice(start, start + coinsPerPage);
-  }, [filteredCoins, currentPage, coinsPerPage]);
+    return coins.slice(start, start + coinsPerPage);
+  }, [coins, currentPage, coinsPerPage]);
+
+  const totalPages = Math.ceil(coins.length / coinsPerPage);
+
 
   const handleSearchChange = useCallback((e) => {
     setSearch(e.target.value);
-    setCurrentPage(1); 
+    if (e.target.value.length === 0) setCurrentPage(1);
   }, []);
 
   const handleNext = useCallback(() => 
