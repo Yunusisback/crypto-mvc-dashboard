@@ -112,7 +112,7 @@ const BalanceChart = ({ period = '1W' }) => {
 
   return (
     
-    <div className="relative h-full w-full">
+    <div className="relative h-full w-full select-none">
       <Line data={data} options={options} />
     </div>
   );

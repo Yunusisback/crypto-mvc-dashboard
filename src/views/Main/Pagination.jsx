@@ -1,7 +1,7 @@
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const Pagination = ({ currentPage, totalPages, handlePrev, handleNext }) => (
-  <div className="flex items-center gap-3 p-2 bg-black/40 backdrop-blur-md rounded-2xl border border-white/5 shadow-xl">
+  <div className="flex items-center gap-3 p-2 bg-black/40 backdrop-blur-md rounded-2xl border border-white/5 shadow-xl select-none">
     
     <button 
       onClick={handlePrev} 

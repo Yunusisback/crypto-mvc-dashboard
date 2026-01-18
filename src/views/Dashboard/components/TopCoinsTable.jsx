@@ -17,7 +17,7 @@ const TopCoinsTable = ({ coins, onCoinClick }) => {
   };
 
   return (
-    <div className="glass-panel rounded-2xl p-6">
+    <div className="glass-panel rounded-2xl p-6 select-none">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-white flex items-center gap-3">
           <div className="w-1 h-8 bg-yellow-400 rounded-full"></div>

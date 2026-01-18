@@ -24,7 +24,7 @@ const DetailView = ({ coinData, chartData, days, setDays }) => {
   };
 
   return (
-    <div className="min-h-screen pt-6 pb-12 px-0 md:px-4 max-w-350 mx-auto animate-fade-in">
+    <div className="min-h-screen pt-6 pb-12 px-0 md:px-4 max-w-350 mx-auto animate-fade-in select-none">
 
       {/* Üst nav */}
       <div className="flex justify-between items-center mb-6">
@@ -101,7 +101,7 @@ const DetailView = ({ coinData, chartData, days, setDays }) => {
           </div>
         </div>
 
-        {/*  İstatistikler */}
+        {/* İstatistikler */}
         <div className="lg:col-span-1 space-y-6">
           <div className="flex items-center gap-2 mb-2 px-2">
             <div className="w-1 h-5 bg-yellow-400 rounded-full"></div>

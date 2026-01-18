@@ -42,7 +42,7 @@ const BuySellModal = ({ allCoins, onClose, preSelectedCoin = null }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center md:p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center md:p-4 bg-black/80 backdrop-blur-sm animate-fade-in select-none">
 
       {/* Modal Container */}
       <div className="glass-panel w-full h-full md:h-auto md:max-w-2xl md:rounded-3xl p-6 md:p-8 border-0 md:border md:border-white/10 flex flex-col animate-in slide-in-from-bottom duration-300 bg-[#121212]">

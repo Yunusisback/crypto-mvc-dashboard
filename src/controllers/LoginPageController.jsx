@@ -8,28 +8,32 @@ import { loginValidationSchema, registerValidationSchema } from '../utils/authSc
 const LoginPageController = ({ setIsLoggedIn, isLoginMode, setIsLoginMode }) => {
   const navigate = useNavigate();
   const [authStatus, setAuthStatus] = useState({ error: '', success: '' });
+  const [isExiting, setIsExiting] = useState(false);
 
-
-const initialValues = isLoginMode
-  ? { email: '', password: '' }
-  : { email: '', age: '', phone: '', password: '', confirmPassword: '' };  
+  const initialValues = isLoginMode
+    ? { email: '', password: '' }
+    : { email: '', age: '', phone: '', password: '', confirmPassword: '' };
 
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
     validationSchema: isLoginMode ? loginValidationSchema : registerValidationSchema,
+    validateOnBlur: false, 
+    validateOnChange: true,
     onSubmit: async (values, { resetForm, setFieldError, setSubmitting }) => {
       setAuthStatus({ error: '', success: '' });
 
-     
-      
       try {
         if (isLoginMode) {
 
-        
+          // Giriş İşlemi
           const user = AuthModel.loginUser(values.email, values.password);
           
           if (!user) {
+
+            // Kullanıcı bulunamadıysa biraz bekle 
+            await new Promise(r => setTimeout(r, 500)); 
+            
             if (!AuthModel.isEmailRegistered(values.email)) {
               setFieldError('email', 'Bu email adresi kayıtlı değil');
               setAuthStatus({ error: 'Email adresi bulunamadı. Lütfen kayıt olun.', success: '' });
@@ -37,16 +41,21 @@ const initialValues = isLoginMode
               setFieldError('password', 'Şifre yanlış');
               setAuthStatus({ error: 'Şifre yanlış. Lütfen tekrar deneyin.', success: '' });
             }
+            setSubmitting(false); 
             return;
           }
 
+          // Başarılı Giriş
           completeAuth(user, 'Giriş başarılı! Yönlendiriliyorsunuz...', resetForm);
 
         } else {
-        
+          
+          //  Kayıt İşlemi 
           if (AuthModel.isEmailRegistered(values.email)) {
+            await new Promise(r => setTimeout(r, 500));
             setFieldError('email', 'Bu email adresi zaten kayıtlı');
             setAuthStatus({ error: 'Bu email adresi zaten kullanılıyor. Lütfen giriş yapın.', success: '' });
+            setSubmitting(false);
             return;
           }
 
@@ -56,26 +65,31 @@ const initialValues = isLoginMode
       } catch (error) {
         console.error('İşlem hatası:', error);
         setAuthStatus({ error: 'Beklenmeyen bir hata oluştu.', success: '' });
-      } finally {
-        setSubmitting(false); 
+        setSubmitting(false);
       }
     },
   });
 
-  
   const completeAuth = (user, message, resetForm) => {
     setAuthStatus({ error: '', success: message });
-    localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("currentUser", JSON.stringify(user));
     
+    // Mesajın okunması için bekle
     setTimeout(() => {
-      setIsLoggedIn(true);
-      navigate('/dashboard', { replace: true });
-      resetForm();
-    }, 1500); // Başarı mesajını okuması için kısa bir süre bekletiyoruz
+
+      // Çıkış animasyonunu başlat
+      setIsExiting(true);
+
+      // Animasyon bitince yönlendir
+      setTimeout(() => {
+        localStorage.setItem("isLoggedIn", "true");
+        setIsLoggedIn(true);
+        navigate('/dashboard', { replace: true });
+        resetForm();
+      }, 800); 
+    }, 1000);
   };
 
-  // Mod değiştirme işlemi
   const handleModeChange = useCallback((newMode) => {
     setIsLoginMode(newMode);
     setAuthStatus({ error: '', success: '' });
@@ -87,9 +101,10 @@ const initialValues = isLoginMode
       formik={formik}
       isLoginMode={isLoginMode}
       setIsLoginMode={handleModeChange}
-      isSubmitting={formik.isSubmitting} 
+      isSubmitting={formik.isSubmitting}
       authError={authStatus.error}
       authSuccess={authStatus.success}
+      isExiting={isExiting}
     />
   );
 };

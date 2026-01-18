@@ -7,7 +7,7 @@ const CreditCard = () => {
 
   return (
   
-    <div className="group w-full max-w-95 lg:w-95 shrink-0 aspect-[1.586] mx-auto perspective-[1000px]">
+    <div className="group w-full max-w-95 lg:w-95 shrink-0 aspect-[1.586] mx-auto perspective-[1000px] select-none">
       <div
         className={`
           relative w-full h-full rounded-2xl overflow-hidden 

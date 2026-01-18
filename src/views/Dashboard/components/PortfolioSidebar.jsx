@@ -4,14 +4,14 @@ import millify from 'millify';
 import CreditCard from './CreditCard'; 
 
 
-const PortfolioSidebar = ({ allCoins, stats, transactions, onBuyClick }) => { // onBuyClick prop'u eklendi
+const PortfolioSidebar = ({ stats, transactions, onBuyClick }) => { 
   const { t, i18n } = useTranslation(); 
 
   const { totalValue = 0, totalProfit = 0, profitPercent = 0 } = stats || {};
   const isProfit = totalProfit >= 0;
 
   return (
-    <div className="space-y-6 sticky top-6 h-full">
+    <div className="space-y-6 sticky top-6 h-full select-none">
       
        {/* Cüzdan */}
       <div className="relative group">

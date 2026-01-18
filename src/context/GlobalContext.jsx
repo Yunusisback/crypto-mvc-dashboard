@@ -129,7 +129,7 @@ export const GlobalProvider = ({ children }) => {
   });
   
   const [transactions, setTransactions] = useState(() => {
-    const local = JSON.parse(localStorage.getItem('transactions'));
+    const local = JSON.parse(localStorage.getItem('transaction'));
     return (local && local.length > 0) ? local : MOCK_TRANSACTIONS;
   });
   

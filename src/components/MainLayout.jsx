@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const MainLayout = ({ children }) => {
   const navigate = useNavigate();
 
- 
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => {
@@ -18,7 +17,7 @@ const MainLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex min-h-screen bg-bg-dark text-white font-sans">
+    <div className="flex min-h-screen bg-[#09090b] text-white font-sans select-none overflow-hidden">
 
       <Sidebar 
         handleLogout={handleLogout} 
@@ -27,12 +26,14 @@ const MainLayout = ({ children }) => {
       />
 
       <main 
-        className={`flex-1 p-4 md:p-8 overflow-x-hidden transition-all duration-300 ease-in-out
-        ${isCollapsed ? 'lg:ml-24' : 'lg:ml-80'}`}
+        className={`
+          flex-1 p-4 md:p-8 
+          transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]
+          ${isCollapsed ? 'ml-20' : 'ml-72'} 
+        `}
       >
-
         {/* Sayfalar (dashboard -home-detail) */}
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto w-full">
            {children}
         </div>
       </main>

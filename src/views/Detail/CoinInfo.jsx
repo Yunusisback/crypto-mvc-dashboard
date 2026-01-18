@@ -11,7 +11,7 @@ const CoinInfo = ({ coin }) => {
   const isPositive = priceChange >= 0;
 
   return (
-    <div className="relative w-full mb-8">
+    <div className="relative w-full mb-8 select-none">
 
       {/* Arka plan dekoratif ışık efektleri */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-3xl opacity-60">

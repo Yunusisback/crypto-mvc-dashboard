@@ -56,7 +56,7 @@ const ChartSection = ({ chartData, days, setDays, coinName }) => {
   ];
 
   return (
-    <div className="glass-panel rounded-4xl p-6 md:p-8 border border-white/5 relative overflow-hidden flex flex-col h-full shadow-2xl">
+    <div className="glass-panel rounded-4xl p-6 md:p-8 border border-white/5 relative overflow-hidden flex flex-col h-full shadow-2xl select-none">
       
        {/* Dekoratif Arka Plan Işığı */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-400/5 rounded-full blur-[100px] pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
@@ -100,13 +100,13 @@ const ChartSection = ({ chartData, days, setDays, coinName }) => {
           <Line data={chartData} options={options} />
         ) : (
           <div className="flex items-center justify-center h-full">
-             <div className="flex flex-col items-center gap-4">
-                <div className="relative w-12 h-12">
-                   <div className="absolute inset-0 border-4 border-white/5 rounded-full"></div>
-                   <div className="absolute inset-0 border-4 border-t-yellow-400 rounded-full animate-spin"></div>
-                </div>
-                <span className="text-gray-500 text-sm font-medium tracking-wide animate-pulse">Grafik Verisi Çekiliyor...</span>
-             </div>
+              <div className="flex flex-col items-center gap-4">
+                 <div className="relative w-12 h-12">
+                    <div className="absolute inset-0 border-4 border-white/5 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-t-yellow-400 rounded-full animate-spin"></div>
+                 </div>
+                 <span className="text-gray-500 text-sm font-medium tracking-wide animate-pulse">Grafik Verisi Çekiliyor...</span>
+              </div>
           </div>
         )}
       </div>

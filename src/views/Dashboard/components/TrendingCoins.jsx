@@ -12,7 +12,7 @@ const TrendingCoins = ({ coins, onCoinClick }) => {
   if (trendingList.length === 0) return null;
 
   return (
-    <div className="glass-panel rounded-2xl p-6">
+    <div className="glass-panel rounded-2xl p-6 select-none">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <FiTrendingUp className="text-red-400" size={24} />

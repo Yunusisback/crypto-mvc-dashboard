@@ -10,7 +10,7 @@ const CoinTable = ({ currentCoins, indexOfFirstCoin, handleRowClick }) => {
   };
 
   return (
-    <div className="w-full space-y-3">
+    <div className="w-full space-y-3 select-none">
 
       {/* Tablo Başlıkları */}
       <div className="grid grid-cols-12 px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider select-none">
