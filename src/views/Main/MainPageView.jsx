@@ -143,23 +143,23 @@ const MainPageView = ({
         </div>
       </div>
 
-      {/* Filtre ve Arama Barı */}
-      <div className="sticky top-4 z-40 mb-8">
-        <div className="bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/10 p-2 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 shadow-2xl shadow-black/50">
+    {/* Filtre ve Arama */}
+      <div className="sticky top-4 z-30 mb-6">
+        <div className="bg-[#0a0a0a]/90 backdrop-blur-md border border-white/10 p-1.5 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-3 shadow-xl">
 
-          {/* Filtre Butonları */}
+          {/* Filtreler */}
           <div className="flex items-center gap-1 overflow-x-auto w-full md:w-auto scrollbar-hide px-1">
             {filters.map(filter => (
               <button
                 key={filter.id}
                 onClick={() => setActiveFilter(filter.id)}
                 className={`
-                    flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap shrink-0 border
+                    flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap shrink-0
                     ${activeFilter === filter.id
-                    ? 'bg-yellow-500 text-black border-yellow-500 shadow-lg shadow-yellow-500/20'
-                    : 'bg-transparent text-gray-400 border-transparent hover:bg-white/5 hover:text-white'
-                    }
-                    `}
+                    ? 'bg-yellow-400 text-black shadow-lg shadow-yellow-400/20'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  }
+                  `}
               >
                 {filter.icon}
                 {filter.label}
@@ -167,26 +167,33 @@ const MainPageView = ({
             ))}
           </div>
 
-          {/* Arama Alanı */}
-          <div className="relative w-full md:w-72 group">
+          {/* Arama*/}
+          <div className="relative w-full md:w-64 group px-1 md:px-0">
 
-            {/* border */}
-            <div className="absolute -inset-0.5 rounded-xl bg-linear-to-r from-yellow-500/50 via-transparent to-yellow-500/50 opacity-30 group-hover:opacity-100 blur transition duration-500"></div>
-            
-            <div className="relative bg-[#121212] rounded-xl flex items-center h-11 border border-white/10 group-focus-within:border-yellow-500/50 transition-colors">
-              <FiSearch className="absolute left-4 text-gray-500 group-focus-within:text-yellow-400 transition-colors" size={18} />
-              <input
-                type="text"
-                placeholder="Coin, Sembol ara..."
-                value={search}
-                onChange={handleSearchChange}
-                className="w-full bg-transparent border-none rounded-xl py-2 pl-12 pr-4 text-sm text-white focus:ring-0 transition-all outline-none placeholder-gray-600 font-medium h-full"
-              />
+            {/* Dış Wrapper */}
+            <div className="relative w-full h-full rounded-xl overflow-hidden p-px">
+
+              {/* Animasyon */}
+              <div className="absolute -inset-full animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_50%,#ffffff_100%)] opacity-40"></div>
+
+
+              {/*  input */}
+              <div className="relative z-10 bg-[#121212] rounded-xl flex items-center h-full border border-transparent transition-all duration-300 group-hover:border-white/30 group-hover:bg-white/5">
+                <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-yellow-400 group-hover:text-gray-300 transition-colors" size={16} />
+                <input
+                  type="text"
+                  placeholder="Coin ara..."
+                  value={search}
+                  onChange={handleSearchChange}
+                  className="w-full bg-transparent border-none rounded-xl py-2.5 pl-10 pr-4 text-xs text-white focus:ring-0 transition-all outline-none placeholder-gray-600 font-medium h-full"
+                />
+              </div>
             </div>
           </div>
 
         </div>
       </div>
+
 
       {/* Tablo Alanı */}
       <div className="glass-panel bg-[#0a0a0a]/40 border border-white/5 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-sm">

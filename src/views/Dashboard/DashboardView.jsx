@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import ErrorMessage from "../../components/ui/ErrorMessage";
 import PremiumChartAnimation from '../../components/ui/PremiumChartAnimation';
-import { FiPieChart, FiArrowRight, FiBell, FiHeadphones, FiChevronDown, FiSearch, FiActivity } from 'react-icons/fi';
+import { FiPieChart, FiArrowRight, FiBell, FiHeadphones, FiChevronDown, FiSearch, FiActivity, FiTrendingUp, FiTrendingDown } from 'react-icons/fi';
 import PortfolioSidebar from './components/PortfolioSidebar';
 import BalanceChart from './components/BalanceChart';
 import BuySellModal from './components/BuySellModal'; 
@@ -29,156 +30,147 @@ const DashboardView = ({
     i18n.changeLanguage(newLang);
   };
 
+  const containerVars = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  };
+
+  const itemVars = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+
   if (isLoading) return <LoadingSpinner message={t('loading')} />;
   if (error) return <ErrorMessage message={error} onRetry={handleRefresh} />;
 
   return (
-    <div className="min-h-screen pt-6 pb-12 px-4 md:px-8 max-w-400 mx-auto animate-fade-in">
-
+    <motion.div 
+      variants={containerVars}
+      initial="hidden"
+      animate="show"
+      className="min-h-screen pt-6 pb-12 px-4 md:px-8 max-w-400 mx-auto font-inter select-none relative"
+    >
+      
       {/* Header Alanı */}
-      <div className="flex flex-col xl:flex-row justify-between items-center mb-10 gap-6">
+      <motion.div variants={itemVars} className="flex flex-col xl:flex-row justify-between items-center mb-10 gap-6 relative z-10">
 
-        {/* Arama Çubuğu  */}
-        <div className="w-full xl:w-auto flex items-center">
-
-          {/* Dış Wrapper */}
-          <div className="relative group w-full md:w-96 rounded-2xl p-px overflow-hidden">
-
-            {/* Dönen Arka Plan Işığı */}
-            <div className="absolute -inset-full animate-spin [animation-duration:5s] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_50%,rgba(255,255,255,0.2)_100%)]"></div>
-
-            {/* İnput Alanı */}
-            <div className="relative z-10 flex items-center w-full h-full bg-[#0a0a0a] rounded-2xl px-5 py-3.5 border border-white/5 transition-colors duration-300 group-hover:bg-[#121212]">
-              <FiSearch
-                className="text-gray-500 mr-3 transition-colors duration-300 group-hover:text-white group-focus-within:text-yellow-400"
-                size={20}
-              />
-              <input
-                type="text"
-                placeholder={t('search_placeholder')}
-                className="bg-transparent border-none outline-none text-sm font-medium text-white placeholder-gray-500 w-full group-focus-within:placeholder-gray-400 transition-all"
-              />
+        {/* Arama Çubuğu */}
+        <div className="relative w-full md:w-64 group px-1 md:px-0">
+            <div className="relative w-full h-full rounded-xl overflow-hidden p-px">
+                <div className="absolute -inset-full animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_50%,#ffffff_100%)] opacity-40"></div>
+                
+                <div className="relative z-10 bg-[#121212] rounded-xl flex items-center h-full border border-transparent transition-all duration-300 group-hover:border-white/30 group-hover:bg-white/5">
+                    <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-yellow-400 group-hover:text-gray-300 transition-colors" size={16} />
+                    <input 
+                        type="text" 
+                        placeholder={t('search_placeholder')}
+                        className="w-full bg-transparent border-none rounded-xl py-2.5 pl-10 pr-4 text-xs text-white focus:ring-0 transition-all outline-none placeholder-gray-600 font-medium h-full"
+                    />
+                </div>
             </div>
-          </div>
         </div>
 
         {/* Profil ve Bildirimler */}
         <div className="flex items-center gap-4 w-full xl:w-auto justify-end">
 
-          {/* İkon Grubu (Dil  Destek  Bildirim) */}
-          <div className="flex items-center gap-1 bg-[#0a0a0a] p-1.5 rounded-2xl border border-white/10 shadow-lg shadow-black/20">
+          <div className="flex items-center gap-1 bg-[#0a0a0a]/60 backdrop-blur-xl p-1.5 rounded-2xl border border-white/10 shadow-lg">
 
-            {/* Dil Değiştirici */}
             <button
               onClick={toggleLanguage}
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-all text-xs font-black tracking-wider"
-              title={t('change_language')}
+              className="w-10 h-10 rounded-xl flex cursor-pointer items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all text-xs font-black tracking-wider"
             >
               {i18n.language.toUpperCase()}
             </button>
 
             <div className="w-px h-5 bg-white/10 mx-1"></div>
 
-            {/* Destek  */}
-            <button
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-400 hover:text-yellow-400 hover:bg-white/5 transition-all relative group"
-              title={t('help')}
-            >
+            <button className="w-10 h-10 rounded-xl flex items-center cursor-pointer justify-center text-gray-300 hover:text-primary hover:bg-white/10 transition-all relative group">
               <FiHeadphones size={20} className="transition-transform group-hover:scale-110" />
-
-              {/* Yanıp Sönen Yeşil Nokta  */}
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-emerald-500 rounded-full border border-[#0a0a0a] animate-pulse shadow-[0_0_8px_#10b981]"></span>
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-emerald-400 rounded-full border border-[#0a0a0a] animate-pulse shadow-[0_0_8px_#34d399]"></span>
             </button>
 
-            {/* Bildirimler */}
-            <button
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-all relative group"
-              title={t('notifications')}
-            >
+            <button className="w-10 h-10 rounded-xl flex items-center cursor-pointer justify-center text-gray-300 hover:text-white hover:bg-white/10 transition-all relative group">
               <FiBell size={20} className="transition-transform group-hover:rotate-12" />
-
-              {/* Yanıp Sönen Kırmızı Nokta */}
               <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-[#0a0a0a] animate-pulse shadow-[0_0_8px_#ef4444]"></span>
             </button>
           </div>
 
-          {/* Profil Kartı */}
-          <div className="flex items-center gap-3 pl-2 pr-4 py-1.5 bg-[#0a0a0a] hover:bg-[#121212] rounded-2xl border border-white/10 hover:border-yellow-400/30 transition-all cursor-pointer group shadow-lg">
-            <div className="w-11 h-11 rounded-xl bg-linear-to-tr from-yellow-400 to-yellow-600 p-0.5 shadow-[0_0_15px_rgba(250,204,21,0.2)] group-hover:shadow-[0_0_20px_rgba(250,204,21,0.4)] transition-shadow">
-              <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Profile" className="w-full h-full rounded-[10px] object-cover border border-black/20" />
+          <div className="flex items-center gap-3 pl-2 pr-4 py-1.5 bg-[#0a0a0a]/60 hover:bg-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl border border-white/10 hover:border-primary/30 transition-all cursor-pointer group shadow-lg">
+            <div className="w-11 h-11 rounded-xl bg-linear-to-br from-primary to-[#8B6914] p-0.5 shadow-[0_0_15px_rgba(255,215,0,0.2)]">
+              <img src="https://imgs.search.brave.com/T5FYY3ziZtmmhNwIDE5KKWsF4nIoEqXV3TTsRwvxmbc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/cGl4YWJheS5jb20v/cGhvdG8vMjAyMC8w/OS8yMi8xOC81NS9h/dmF0YXItNTU5NDA1/Ml82NDAucG5n" alt="Profile" className="w-full h-full rounded-[10px] object-cover border border-black/20" />
             </div>
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-bold text-white leading-none group-hover:text-yellow-400 transition-colors">Ely John</p>
+              <p className="text-sm font-bold text-white leading-none group-hover:text-primary transition-colors">DENİZ</p>
             </div>
             <FiChevronDown className="text-gray-500 group-hover:text-white transition-colors" />
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      {/* Ana İçerik Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
 
-        {/* Ana İçerik */}
         <div className="lg:col-span-8 space-y-8">
 
-          {/* banner */}
-          <div className="relative rounded-4xl p-10 overflow-hidden group border border-white/5 shadow-2xl">
+          {/* Banner */}
+          <motion.div 
+            variants={itemVars}
+            className="relative rounded-[2.5rem] p-8 md:p-10 overflow-hidden group border border-white/10 shadow-2xl bg-[#0a0a0a]"
+          >
+            <div className="absolute inset-0 bg-linear-to-r from-[#1a1a1a] via-[#0d0d0d] to-bg-dark"></div>
+            <div className="absolute top-0 right-0 w-125 h-125 bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4 group-hover:bg-primary/10 transition-colors duration-700"></div>
+            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
 
-            {/* Arka Plan Efektleri */}
-            <div className="absolute inset-0 bg-[#121212]"></div>
-            <div className="absolute top-0 right-0 w-125 h-125 bg-linear-to-b from-yellow-600/20 to-transparent rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4"></div>
-            <div className="absolute bottom-0 left-0 w-75 h-75 bg-blue-600/10 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4"></div>
-
-            {/* Banner İçeriği */}
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="max-w-lg text-center md:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 text-xs font-bold uppercase tracking-wider mb-4">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-6 backdrop-blur-sm">
                   <FiActivity /> {t('weekly_analysis')}
                 </div>
                 <h2 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight">
-                  {t('portfolio_ai_title')} <br /> <span className="text-transparent bg-clip-text bg-linear-to-r from-white to-gray-500">{t('portfolio_ai_subtitle')}</span>
+                  {t('portfolio_ai_title')} <br /> 
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-[#C5A358]">{t('portfolio_ai_subtitle')}</span>
                 </h2>
                 <p className="text-gray-400 mb-8 leading-relaxed">
                   {t('portfolio_ai_desc')}
                 </p>
                 <div className="flex gap-4 justify-center md:justify-start">
-                  <button className="bg-white text-black px-8 py-3.5 rounded-xl font-bold hover:bg-yellow-400 transition-all shadow-lg hover:shadow-yellow-400/20 active:scale-95 cursor-pointer">
+                  <button className="bg-primary text-black px-8 py-3.5 rounded-xl font-bold hover:bg-[#FDB931] transition-all shadow-[0_0_20px_rgba(255,215,0,0.3)] hover:shadow-[0_0_30px_rgba(255,215,0,0.5)] active:scale-95 cursor-pointer">
                     {t('start_analysis')}
                   </button>
-                  <button className="px-8 py-3.5 rounded-xl font-bold text-white border border-white/10 hover:bg-white/5 transition-all cursor-pointer">
+                  <button className="px-8 py-3.5 rounded-xl font-bold text-white border border-white/10 hover:bg-white/5 hover:border-white/20 transition-all cursor-pointer backdrop-blur-sm">
                     {t('more_info')}
                   </button>
                 </div>
               </div>
 
-              {/* grafik animasyonu */}
-              <div className="hidden md:block">
+              <div className="hidden md:block transform group-hover:scale-105 transition-transform duration-500">
                 <PremiumChartAnimation />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Portföy Grafiği */}
-          <div className="relative group rounded-4xl p-px bg-linear-to-b from-white/10 to-transparent shadow-2xl">
+          <motion.div 
+            variants={itemVars}
+            className="relative group rounded-[2.5rem] p-px bg-linear-to-b from-white/10 to-transparent shadow-2xl overflow-hidden"
+          >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/5 rounded-full blur-[100px] transition-colors duration-500"></div>
 
-            {/* Arka planda hafif sarı ambient ışık */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-yellow-500/5 rounded-full blur-[80px] group-hover:bg-yellow-500/10 transition-colors duration-500"></div>
-
-            <div className="bg-[#0D0D0D] rounded-[1.9rem] p-6 md:p-8 relative z-10 border border-white/5 group-hover:border-yellow-500/20 transition-colors duration-500">
-
-              {/* Header */}
-              <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <div className="bg-[#0a0a0a]/80 backdrop-blur-xl rounded-[2.4rem] p-6 md:p-8 relative z-10 border border-white/5">
+              
+              <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 relative z-10">
                 <div>
                   <h3 className="text-xl font-black text-white flex items-center gap-3">
-                    <span className="w-1 h-6 bg-yellow-400 rounded-full shadow-[0_0_10px_#facc15]"></span>
+                    <span className="w-1.5 h-6 bg-primary rounded-full shadow-[0_0_10px_#FFD700]"></span>
                     {t('portfolio_performance')}
                   </h3>
-                  <p className="text-xs text-gray-500 mt-1 pl-4 font-medium tracking-wide">
+                  <p className="text-xs text-gray-500 mt-1 pl-5 font-medium tracking-wide flex items-center gap-2">
+                    <span className="text-emerald-400 flex items-center gap-1 bg-emerald-400/10 px-1.5 rounded"><FiTrendingUp/> +%12.4</span> 
                     {t('portfolio_change_desc')}
                   </p>
                 </div>
 
-                {/* Zaman Seçici */}
-                <div className="flex bg-[#1A1A1A] p-1 rounded-xl border border-white/5">
+                <div className="flex bg-[#1A1A1A] p-1.5 rounded-xl border border-white/5">
                   {[
                     { label: '1G', value: '1D' },
                     { label: '1H', value: '1W' },
@@ -190,7 +182,7 @@ const DashboardView = ({
                       key={item.value}
                       onClick={() => setPeriod(item.value)}
                       className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 ${period === item.value
-                          ? 'bg-yellow-400 text-black shadow-[0_0_10px_rgba(250,204,21,0.4)]'
+                          ? 'bg-primary text-black shadow-lg shadow-primary/20'
                           : 'text-gray-500 hover:text-white hover:bg-white/5'
                         }`}
                     >
@@ -200,18 +192,20 @@ const DashboardView = ({
                 </div>
               </div>
 
-              {/* Grafik Alanı */}
-              <div className="h-87.5 w-full -ml-2">
+              <div className="h-87.5 w-full -ml-2 relative z-10">
                 <BalanceChart period={period} />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* İzleme Listesi */}
-          <div className="glass-panel p-6 md:p-8 rounded-4xl border border-white/5">
+          <motion.div 
+            variants={itemVars}
+            className="bg-[#0a0a0a]/60 backdrop-blur-xl p-6 md:p-8 rounded-[2.5rem] border border-white/5 shadow-2xl"
+          >
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-xl font-bold text-white flex items-center gap-3">
-                <div className="p-2 bg-yellow-400/10 rounded-lg text-yellow-400">
+                <div className="p-2.5 bg-primary/10 rounded-xl text-primary border border-primary/20">
                   <FiPieChart size={20} />
                 </div>
                 {t('watchlist')}
@@ -225,25 +219,31 @@ const DashboardView = ({
             {watchlistCoins.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {watchlistCoins.map((coin) => (
-                  <div
+                  <motion.div
                     key={coin.id}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => handleCoinClick(coin.id)}
-                    className="group relative p-5 rounded-2xl bg-[#0a0a0a] border border-white/5 hover:border-yellow-400/30 transition-all duration-300 cursor-pointer overflow-hidden"
+                    className="group relative p-5 rounded-3xl bg-[#0f0f0f] border border-white/5 hover:border-primary/30 transition-all duration-300 cursor-pointer overflow-hidden shadow-lg"
                   >
-                    {/* Hover Glow */}
-                    <div className="absolute inset-0 bg-linear-to-r from-yellow-400/0 via-yellow-400/0 to-yellow-400/0 group-hover:via-yellow-400/5 transition-all duration-500"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-primary/0 via-primary/0 to-primary/0 group-hover:via-primary/5 transition-all duration-500"></div>
 
                     <div className="relative z-10 flex items-center gap-4">
+
                       <div className="relative">
-                        <img
-                          src={coin.image}
-                          alt={coin.name}
-                          className="w-12 h-12 rounded-full group-hover:scale-110 transition-transform duration-300 bg-white/5 p-1"
-                        />
+                        <div className="w-14 h-14 rounded-2xl bg-black border border-white/10 p-2 group-hover:border-primary/30 transition-colors shadow-lg">
+                            <img
+                            src={coin.image}
+                            alt={coin.name}
+                            className="w-full h-full object-contain"
+                            />
+                        </div>
+                        
+                      
                         <div className="absolute -bottom-1 -right-1 bg-[#0a0a0a] rounded-full p-0.5">
                           {coin.price_change_percentage_24h > 0
-                            ? <div className="w-4 h-4 bg-emerald-500 rounded-full border-2 border-[#0a0a0a]"></div>
-                            : <div className="w-4 h-4 bg-red-500 rounded-full border-2 border-[#0a0a0a]"></div>
+                            ? <div className="w-3 h-3 bg-emerald-500 rounded-full border border-black shadow-[0_0_5px_#10b981]"></div>
+                            : <div className="w-3 h-3 bg-red-500 rounded-full border border-black shadow-[0_0_5px_#ef4444]"></div>
                           }
                         </div>
                       </div>
@@ -251,45 +251,46 @@ const DashboardView = ({
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start">
                           <div>
-                            <h4 className="font-bold text-white text-lg leading-tight group-hover:text-yellow-400 transition-colors truncate">
+                            <h4 className="font-bold text-white text-lg leading-tight group-hover:text-primary transition-colors truncate">
                               {coin.symbol.toUpperCase()}
                             </h4>
-                            <span className="text-xs text-gray-500 font-medium truncate block">{coin.name}</span>
+                            <span className="text-xs text-gray-500 font-medium truncate block mt-0.5">{coin.name}</span>
                           </div>
                           <div className="text-right">
-                            <div className="text-white font-mono font-bold tracking-tight">
+                            <div className="text-white font-mono font-bold tracking-tight text-lg">
                               ${coin.current_price.toLocaleString()}
                             </div>
-                            <div className={`text-xs font-bold mt-0.5 inline-flex items-center px-1.5 py-0.5 rounded-md ${coin.price_change_percentage_24h > 0
-                                ? 'bg-emerald-500/10 text-emerald-400'
-                                : 'bg-red-500/10 text-red-400'
+                            <div className={`text-xs font-bold mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-md border ${coin.price_change_percentage_24h > 0
+                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                                : 'bg-red-500/10 text-red-400 border-red-500/20'
                               }`}>
-                              {coin.price_change_percentage_24h > 0 ? '+' : ''}{coin.price_change_percentage_24h.toFixed(2)}%
+                              {coin.price_change_percentage_24h > 0 ? <FiTrendingUp size={10}/> : <FiTrendingDown size={10}/>}
+                              {coin.price_change_percentage_24h.toFixed(2)}%
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-16 border-2 border-dashed border-white/5 rounded-2xl bg-white/2">
+              <div className="flex flex-col items-center justify-center py-16 border border-dashed border-white/10 rounded-3xl bg-white/2">
                 <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
                   <FiSearch className="text-gray-500 text-2xl" />
                 </div>
                 <p className="text-gray-400 mb-6 font-medium">{t('watchlist_empty')}</p>
-                <Link to="/home" className="bg-yellow-400 text-black px-8 py-3 rounded-xl font-bold hover:bg-yellow-300 transition shadow-lg shadow-yellow-400/20 inline-flex items-center gap-2">
+                <Link to="/home" className="bg-primary text-black px-8 py-3 rounded-xl font-bold hover:bg-[#FDB931] transition shadow-lg shadow-primary/20 inline-flex items-center gap-2">
                   <span className="text-xl leading-none">+</span> {t('add_coin')}
                 </Link>
               </div>
             )}
-          </div>
+          </motion.div>
         </div>
 
-        {/* Yan Çubuk */}
-        <div className="lg:col-span-4">
-          <div className="sticky top-24">
+        {/* Yan Menü */}
+        <div className="lg:col-span-4 relative z-10">
+          <div className="sticky top-6">
             <PortfolioSidebar
               allCoins={allCoins}
               stats={portfolioStats}
@@ -301,13 +302,14 @@ const DashboardView = ({
 
       </div>
 
+      {/* Alım Satım Modalı */}
       {showBuyModal && (
         <BuySellModal
           allCoins={allCoins}
           onClose={() => setShowBuyModal(false)}
         />
       )}
-    </div>
+    </motion.div>
   );
 };
 
