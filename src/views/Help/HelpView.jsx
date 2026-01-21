@@ -83,19 +83,19 @@ const HelpView = () => {
             <div className="relative w-full h-full rounded-2xl overflow-hidden p-px">
                 
                 
-                <div className="absolute -inset-full animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_50%,#ef4444_100%)] opacity-40"></div>
+                <div className="absolute -inset-full animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_60%_50%,transparent_0%,transparent_50%,#ef4444_100%)] opacity-80"></div>
                 
            
-                <div className="relative z-10 bg-[#0a0a0a] rounded-2xl flex items-center h-full px-4 border border-transparent transition-all duration-300 group-hover:border-red-500/20 group-hover:bg-red-500/5">
+                <div className="relative z-10 bg-[#201d1d] rounded-2xl flex items-center h-full px-4 border border-transparent transition-all duration-300 group-hover:border-red-500/20 group-hover:bg-red-500/5">
                     
-                    <FiSearch className="text-gray-400 w-6 h-6 mr-4 group-focus-within:text-red-500 group-hover:text-red-400 transition-colors" />
+                    <FiSearch className="text-white w-6 h-6 mr-4 group-focus-within:text-red-500 group-hover:text-red-400 transition-colors" />
                     
                     <input 
                         type="text" 
                         placeholder="Sorunuzu buraya yazın..." 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-transparent border-none text-white text-lg placeholder-gray-600 focus:ring-0 focus:outline-none font-medium h-full"
+                        className="w-full bg-transparent border-none text-white text-lg placeholder-gray-400 focus:ring-0 focus:outline-none font-medium h-full"
                     />
                 </div>
             </div>

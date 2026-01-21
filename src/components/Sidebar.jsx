@@ -153,7 +153,7 @@ const Sidebar = ({ handleLogout, isCollapsed, toggleSidebar }) => {
                   className={({ isActive }) => `
                     relative flex items-center ${isCollapsed ? 'justify-center w-14 h-14' : 'gap-3 px-3 py-3 w-full'} 
                     mx-auto rounded-xl transition-all duration-200 group
-                    ${isActive ? '' : 'hover:bg-white/5 hover:shadow-[0_0_15px_rgba(255,255,255,0.05)]'}
+                    ${isActive ? '' : 'hover:bg-white/8 hover:shadow-[0_0_15px_rgba(255,255,255,0.05)]'}
                   `}
                 >
                   {({ isActive }) => (

@@ -101,7 +101,7 @@ const SettingsView = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Ad Soyad</label>
-                        <input type="text" defaultValue="Ely John" className="w-full bg-[#0a0a0a] border border-white/5 rounded-xl px-4 py-3 text-white focus:border-yellow-500/50 focus:bg-white/5 transition-all outline-none" />
+                        <input type="text" defaultValue="Deniz Kaya" className="w-full bg-[#0a0a0a] border border-white/5 rounded-xl px-4 py-3 text-white focus:border-yellow-500/50 focus:bg-white/5 transition-all outline-none" />
                       </div>
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Kullanıcı Adı</label>

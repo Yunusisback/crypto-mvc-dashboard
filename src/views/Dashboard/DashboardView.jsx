@@ -57,14 +57,14 @@ const DashboardView = ({
         {/* Arama Çubuğu */}
         <div className="relative w-full md:w-64 group px-1 md:px-0">
             <div className="relative w-full h-full rounded-xl overflow-hidden p-px">
-                <div className="absolute -inset-full animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_50%,#ffffff_100%)] opacity-40"></div>
+                <div className="absolute -inset-full animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_60%_50%,transparent_0%,transparent_50%,#ffffff_100%)] opacity-80"></div>
                 
-                <div className="relative z-10 bg-[#121212] rounded-xl flex items-center h-full border border-transparent transition-all duration-300 group-hover:border-white/30 group-hover:bg-white/5">
-                    <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-yellow-400 group-hover:text-gray-300 transition-colors" size={16} />
+                <div className="relative z-10 bg-[#121212] rounded-xl flex items-center h-full border border-gray-600 transition-all duration-300 group-hover:border-white/30 group-hover:bg-white/5">
+                    <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-white group-hover:text-gray-200 transition-colors" size={16} />
                     <input 
                         type="text" 
                         placeholder={t('search_placeholder')}
-                        className="w-full bg-transparent border-none rounded-xl py-2.5 pl-10 pr-4 text-xs text-white focus:ring-0 transition-all outline-none placeholder-gray-600 font-medium h-full"
+                        className="w-full bg-transparent border-none rounded-xl py-2.5 pl-10 pr-4 text-xs text-white focus:ring-0 transition-all outline-none placeholder-gray-400 font-medium h-full"
                     />
                 </div>
             </div>
@@ -123,7 +123,7 @@ const DashboardView = ({
 
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="max-w-lg text-center md:text-left">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-6 backdrop-blur-sm">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5  border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-6 backdrop-blur-sm">
                   <FiActivity /> {t('weekly_analysis')}
                 </div>
                 <h2 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight">
